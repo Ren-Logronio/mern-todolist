@@ -1,3 +1,4 @@
+import Footer from './components/Footer'
 import Header from './components/Header'
 import Dash from './pages/Dash'
 
@@ -7,6 +8,7 @@ function App() {
     <>
       <Header/>
       <Dash></Dash>
+      <Footer/>
     </>
   )
 }

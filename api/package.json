@@ -7,12 +7,14 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@types/node": "*",
     "cors": "^2.8.5",
     "dot-env": "^0.0.1",
     "express": "^4.18.2",
-    "firebase-admin": "^12.0.0",
+    "helmet": "^7.1.0",
     "mongodb": "^6.3.0",
-    "mongoose": "^8.1.1"
+    "mongoose": "^8.1.1",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

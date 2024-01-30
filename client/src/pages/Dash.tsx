@@ -11,7 +11,7 @@ export type Todo = {
 export default function Dash() {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [inputText, setInputText] = useState<string>("");
-
+    
     useEffect(() => {
         console.log(todos);
     }, [todos])

@@ -5,15 +5,15 @@ import { todoModel as Todo } from "../models/todoModel";
 const router = express.Router();
 
 // Place routes
-router.get('/', (res: Response, req: Request) => {
+router.get('/', (req: Request, res: Response,) => {
     TodoList.find({}).then(
-        (todoList: any) => res.status(200).json(todoList),
+        (todoList: any) => { res.status(200).json(todoList) },
     ).catch(
-        (err: any) => res.status(500).json(err),
+        (err: any) => { res.status(500).json(err) },
     )
 })
 
-router.get('/:id', (res: Response, req: Request) => {
+router.get('/:id', (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findById(req.params.id).then(
         (todoList: any) => res.status(200).json(todoList),
@@ -22,7 +22,7 @@ router.get('/:id', (res: Response, req: Request) => {
     )
 })
 
-router.post('/', (res: Response, req: Request) => {
+router.post('/', (req: Request, res: Response,) => {
     const newTodoList = new TodoList({ ...req.body });
     newTodoList.save().then(
         (todoList: any) => res.status(200).json(todoList),
@@ -31,7 +31,7 @@ router.post('/', (res: Response, req: Request) => {
     )
 });
 
-router.post('/:id/todo/', (res: Response, req: Request) => {
+router.post('/:id/todo/', (req: Request, res: Response,) => {
     TodoList.findById(req.params.id).then(
         (todoList: any) => {
             const newTodo = new Todo({ ...req.body });
@@ -55,7 +55,7 @@ router.post('/:id/todo/', (res: Response, req: Request) => {
     );
 });
 
-router.put('/:id', (res: Response, req: Request) => {
+router.put('/:id', (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findByIdAndUpdate(todoListId, { ...req.body }, { new: true }).then(
         (todoList: any) => res.status(200).json(todoList),
@@ -64,7 +64,7 @@ router.put('/:id', (res: Response, req: Request) => {
     )
 });
 
-router.delete('/:id', (res: Response, req: Request) => {
+router.delete('/:id', (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findByIdAndDelete(todoListId).then(
         (todoList: any) => res.status(200).json(todoList),

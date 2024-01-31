@@ -6,7 +6,13 @@ export interface todo {
 };
 
 export interface todoList {
+    user: user;
     name: string;
     description: string;
     todos: [];
 };
+
+export interface user {
+    email: string,
+    password: string,
+}

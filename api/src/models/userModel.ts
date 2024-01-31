@@ -1,8 +1,8 @@
-import mongoose, { Schema } from "mongoose";
-import { user } from "../models";
+import mongoose, { Model, Schema } from "mongoose";
+import { IUser } from "../models";
 import bcrypt from "bcryptjs";
 
-const userSchema = new Schema<user> ({
+const userSchema = new Schema<IUser> ({
     email: String,
     password: String,
     username: String,

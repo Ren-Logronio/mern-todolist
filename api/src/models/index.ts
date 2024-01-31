@@ -1,18 +1,20 @@
-export interface todo {
-    title: string;
+import { Document } from "mongoose";
+
+export interface ITodo {
     description: string;
     completion: boolean;
     deadline: Date;
+    order: number;
 };
 
-export interface todoList {
-    user: user;
+export interface ITodoList {
+    user: IUser;
     name: string;
     description: string;
     todos: [];
 };
 
-export interface user {
+export interface IUser {
     email: string,
     password: string,
     tektok?: string,

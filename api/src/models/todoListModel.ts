@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { todoList } from ".";
+import { ITodoList } from ".";
 
-const todoListSchema = new Schema<todoList>({
+const todoListSchema = new Schema<ITodoList>({
     user: {
         type: Schema.Types.ObjectId,
         ref: "user",

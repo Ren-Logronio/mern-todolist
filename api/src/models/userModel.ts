@@ -1,11 +1,20 @@
-import { Model, Models, Schema } from "mongoose";
-import { user } from "./models";
+import mongoose, { Schema } from "mongoose";
+import { user } from "../models";
+import bcrypt from "bcryptjs";
 
-const userSchema = new Schema<user, Model<user>> ({
+const userSchema = new Schema<user> ({
     email: String,
     password: String,
-}, { timestamps: true });
+    username: String,
+}, { 
+    methods: {
+        verifyPassword(password) {
+            return bcrypt.compareSync(password, this?.password );
+        }
+    },
+    timestamps: true 
+});
 
-const userModel: Model<user> = new Model('user', userSchema);
+const userModel = mongoose.model('user', userSchema);
 
 export { userSchema, userModel };

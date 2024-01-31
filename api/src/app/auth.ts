@@ -1,6 +1,6 @@
 import passport from "passport";
-import { user as userType } from "../models";
-import { userModel as User, userSchema } from "../models/userModel";
+import { IUser } from "../models";
+import { userModel as User } from "../models/userModel";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
 import { Error } from "mongoose";
@@ -28,7 +28,7 @@ const RegistrationStrategy = new LocalStrategy(
                 const encryptedPassword = bcrypt.hashSync(password, salt);
                 const newUser = new User({email: String, password: encryptedPassword, username: req.body.username});
                 newUser.save()
-                    .then((user: userType) => done(null, user))
+                    .then((user: IUser) => done(null, user))
                     .catch((err: Error) => done(err, false));
             }
             if(user) done("User already exists", false);

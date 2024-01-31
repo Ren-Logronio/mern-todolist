@@ -1,5 +1,5 @@
-import { todoList, todo } from "./models";
-import { Model, Schema } from "mongoose";
+import { todoList, todo } from ".";
+import mongoose, { Schema } from "mongoose";
 
 const todoSchema = new Schema<todo>({
     title: String,
@@ -7,6 +7,6 @@ const todoSchema = new Schema<todo>({
     deadline: Date,
 }, { timestamps: true });
 
-const todoModel = new Model('todo', todoSchema);
+const todoModel = mongoose.model('todo', todoSchema);
 
 export { todoSchema, todoModel, };

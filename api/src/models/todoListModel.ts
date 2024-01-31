@@ -1,5 +1,5 @@
-import { Model, Schema } from "mongoose";
-import { todoList } from "./models";
+import mongoose, { Schema } from "mongoose";
+import { todoList } from ".";
 
 const todoListSchema = new Schema<todoList>({
     user: {
@@ -14,6 +14,6 @@ const todoListSchema = new Schema<todoList>({
     }]
 }, { timestamps: true });
 
-const todoListModel = new Model("todoList", todoListSchema);
+const todoListModel = mongoose.model("todoList", todoListSchema);
 
 export { todoListSchema, todoListModel };

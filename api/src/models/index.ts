@@ -15,4 +15,6 @@ export interface todoList {
 export interface user {
     email: string,
     password: string,
+    tektok?: string,
+    username?: string;
 }

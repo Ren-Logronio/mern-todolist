@@ -1,20 +1,21 @@
 import { Document } from "mongoose";
 
-export interface ITodo {
+export type ITodo = {
     description: string;
     completion: boolean;
     deadline: Date;
     order: number;
 };
 
-export interface ITodoList {
+export type ITodoList = {
     user: IUser;
     name: string;
     description: string;
+    order: number;
     todos: [];
 };
 
-export interface IUser {
+export type IUser = {
     email: string,
     password: string,
     tektok?: string,

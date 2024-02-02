@@ -52,7 +52,24 @@ router.put("/:id", (req: Request, res: Response) => {
         (err: any) => {
             res.status(500).json(err);
         }
-    )
+    );
+});
+
+router.put('/reorder', (req: Request, res: Response) => {
+    const reorderedTodos = req.body;
+    const newlyOrderedTodos = reorderedTodos.map((todoItem: any) => {
+        const { _id, order } = todoItem;
+        Todo.findByIdAndUpdate(todoItem._id, { order }, { new: true}).then(
+            (todo: any) => todo
+        ).catch(
+            (err: Error) => false
+        );
+    });
+    if(newlyOrderedTodos.includes(false)) {
+        res.status(500).json("Error updating order");
+    } else {
+        res.status(200).json(newlyOrderedTodos);
+    }
 });
 
 router.delete("/:id", (req: Request, res: Response) => {

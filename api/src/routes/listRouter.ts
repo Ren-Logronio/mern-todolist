@@ -64,6 +64,23 @@ router.put('/:id', (req: Request, res: Response,) => {
     )
 });
 
+router.put('/reorder', (req: Request, res: Response,) => {
+    const reOrderedList = req.body;
+    const newlyOrderedList = reOrderedList.map((listObject: any) => {
+        const { _id, order } = listObject;
+        TodoList.findByIdAndUpdate(_id, { order }, { new: true }).then(
+            (todoList: any) => todoList,
+        ).catch(
+            (err: any) => false,
+        )
+    });
+    if (newlyOrderedList.includes(false)) {
+        res.status(500).json("Error reordering list");
+    } else {
+        res.status(200).json(newlyOrderedList);
+    }
+});
+
 router.delete('/:id', (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findByIdAndDelete(todoListId).then(

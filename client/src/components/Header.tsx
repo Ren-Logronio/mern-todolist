@@ -1,11 +1,13 @@
 export default function Header() {
     return (
-        <div className="fixed flex flex-row justify-between h-12 bg-white shadow-sm border border-t-0 border-e-0 border-s-0 border-slate-200 border-solid w-[100%]">
-            <h1 className="m-0">Mama Mern</h1>
-            <div className="flex flex-row">
-                <p className="m-0 align-middle text-center">Lorem Ipsum</p>
-                <button>Some Action</button>
+        <section className="flex flex-row justify-center h-12 bg-white shadow-sm border-b border-slate-200 border-solid">
+            <div className=" min-w-[1618px] flex flex-row items-center justify-between">
+                <h1 className="m-0 select-none">Mama Mern TodoList</h1>
+                <div className="flex flex-row items-center">
+                    <p className="m-0 mr-3 mt-0 text-center select-none">Anonymous</p>
+                    <button className="border border-slate-400 bg-transparent text-black hover:bg-slate-400 hover:text-white p-2">Login</button>
+                </div>
             </div>
-        </div>
+        </section>
     )
 }

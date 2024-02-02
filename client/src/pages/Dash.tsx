@@ -1,65 +1,33 @@
-import { useEffect, useState } from "react"
-import { v4 as uuidv4 } from 'uuid';
-import TodoItem from "../components/TodoItem";
+import React, { ReactNode, useEffect, useState } from "react"
+import DashContainer from "../components/DashContainer"
+import ListMenu from "../components/ListMenu"
+import TodosMenu from "../components/TodosMenu"
+import { IList } from "../components/ListItem"
 
-export type Todo = {
-    _id: string,
-    title: string,
-    completed: boolean,
-}
+export default function Dash(){
 
-export default function Dash() {
-    const [todos, setTodos] = useState<Todo[]>([]);
-    const [inputText, setInputText] = useState<string>("");
-    
-    useEffect(() => {
-        console.log(todos);
-    }, [todos])
+    const [list, setList] = useState<IList[]>([]);
+    const [selectedList, setSelectedList] = useState<IList | null>(null);
 
     useEffect(() => {
-        console.log(inputText);
-    }, [inputText])
+        setList(
+            [
+                {id:"myid", title: "Daily Activities", description:"Lorem ipsum dolor sit amet consectetur. Ullamcorper quis vitae et non arcu ut neque vol."},
+                {id:"yeser", title: "Gym Stuff", description:""},
+            ]
+        )
+    }, [])
 
-    const addTodo = () => {
-        const newTodo: Todo = {
-            _id: uuidv4(),
-            title: inputText,
-            completed: false,
-        }
-        setTodos([...todos, newTodo]);
-        setInputText("");
-    }
+    useEffect(()=>{ console.log(selectedList) }, [selectedList])
 
-    const toggleCompletion = (id: string) => {
-        const newTodos = todos.map(todo => {
-            if (todo._id === id) {
-                todo.completed = !todo.completed;
-            }
-            return todo;
-        });
-        setTodos(newTodos);
+    const selectList = (list: IList | null) => {
+        setSelectedList(list);
     };
 
-    const removeTodo = (id: string) => {
-        const newTodos = todos.filter(todo => todo._id !== id);
-        setTodos(newTodos);
-    }
-
-    const todoList = todos.map(todo => {
-        return (
-            <TodoItem key={todo._id} oid={todo._id} title={todo.title} completed={todo.completed} callbackToggleCompletion={toggleCompletion} callbackRemoveTodo={removeTodo} />
-        );
-    });
-
     return (
-        <div className="flex flex-col justify-center h-screen text-center">
-            <h1>Todo List</h1>
-            <div className="flex flex-row justify-center">
-                <input className="border border-solid border-slate-200" onChange={(e) => setInputText(e.target.value)} value={inputText} type="text" />
-                <button className="p-2 border border-slate-200 rounded-sm px-8" onClick={addTodo}>Add</button>
-            </div>
-            <h1 className=" mt-5">List</h1>
-            { todoList }
-        </div>
+        <DashContainer>
+            <ListMenu lists={list} selected={selectedList} selectListCallback={selectList}/>
+            <TodosMenu selected={selectedList}/>
+        </DashContainer>
     )
 }

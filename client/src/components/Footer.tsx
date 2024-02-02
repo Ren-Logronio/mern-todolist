@@ -1,7 +1,8 @@
 export default function Footer() {
     return (
-        <div className="fixed bottom-0 flex flex-row justify-center w-full">
-            Mama Mern - Reinhart F. Logronio
+        <div className="flex flex-row justify-center border-t border-solid border-slate-200">
+            <u>Mama Mern Todo list</u>
+            <p className=" m-0 ml-2">by Reinhart F. Logronio</p>
         </div>
     )
 }

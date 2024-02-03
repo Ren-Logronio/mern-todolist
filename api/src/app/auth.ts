@@ -3,9 +3,10 @@ import { IUser } from "../models";
 import { userModel as User } from "../models/userModel";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
-import { Error } from "mongoose";
+import jwt from "jsonwebtoken";
 
 const salt = bcrypt.genSaltSync(7);
+const secret: string = process.env.JWT_SECRET || "secret";
 
 const LoginStrategy = new LocalStrategy(
     { usernameField: "email", },
@@ -14,6 +15,13 @@ const LoginStrategy = new LocalStrategy(
             if (err) return done(err);
             if (!user) return done("No user found", false);
             if (!user.verifyPassword(password)) return done(null, false); 
+            const token = jwt.sign(
+                { username: user.username },
+                secret,
+                {
+                  expiresIn: "30m",
+                }
+            );
             return done(null, user);
         })
     }

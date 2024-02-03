@@ -18,6 +18,5 @@ export type ITodoList = {
 export type IUser = {
     email: string,
     password: string,
-    tektok?: string,
     username?: string;
 }

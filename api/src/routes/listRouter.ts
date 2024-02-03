@@ -1,11 +1,12 @@
 import express, { Request, Response } from "express";
 import { todoListModel as TodoList } from "../models/todoListModel";
 import { todoModel as Todo } from "../models/todoModel";
+import artificiallyDelay from "../middlewares/artificiallyDelay";
 
 const router = express.Router();
 
 // Place routes
-router.get('/', (req: Request, res: Response,) => {
+router.get('/', artificiallyDelay, (req: Request, res: Response,) => {
     TodoList.find({}).then(
         (todoList: any) => { res.status(200).json(todoList) },
     ).catch(
@@ -13,7 +14,7 @@ router.get('/', (req: Request, res: Response,) => {
     )
 })
 
-router.get('/:id', (req: Request, res: Response,) => {
+router.get('/:id', artificiallyDelay, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findById(req.params.id).then(
         (todoList: any) => res.status(200).json(todoList),
@@ -22,7 +23,7 @@ router.get('/:id', (req: Request, res: Response,) => {
     )
 })
 
-router.post('/', (req: Request, res: Response,) => {
+router.post('/', artificiallyDelay, (req: Request, res: Response,) => {
     const newTodoList = new TodoList({ ...req.body });
     newTodoList.save().then(
         (todoList: any) => res.status(200).json(todoList),
@@ -31,7 +32,7 @@ router.post('/', (req: Request, res: Response,) => {
     )
 });
 
-router.post('/:id/todo/', (req: Request, res: Response,) => {
+router.post('/:id/todo/', artificiallyDelay, (req: Request, res: Response,) => {
     TodoList.findById(req.params.id).then(
         (todoList: any) => {
             const newTodo = new Todo({ ...req.body });
@@ -55,7 +56,7 @@ router.post('/:id/todo/', (req: Request, res: Response,) => {
     );
 });
 
-router.put('/:id', (req: Request, res: Response,) => {
+router.put('/:id', artificiallyDelay, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findByIdAndUpdate(todoListId, { ...req.body }, { new: true }).then(
         (todoList: any) => res.status(200).json(todoList),
@@ -64,7 +65,7 @@ router.put('/:id', (req: Request, res: Response,) => {
     )
 });
 
-router.put('/reorder', (req: Request, res: Response,) => {
+router.put('/reorder', artificiallyDelay, (req: Request, res: Response,) => {
     const reOrderedList = req.body;
     const newlyOrderedList = reOrderedList.map((listObject: any) => {
         const { _id, order } = listObject;
@@ -81,7 +82,7 @@ router.put('/reorder', (req: Request, res: Response,) => {
     }
 });
 
-router.delete('/:id', (req: Request, res: Response,) => {
+router.delete('/:id', artificiallyDelay, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findByIdAndDelete(todoListId).then(
         (todoList: any) => res.status(200).json(todoList),

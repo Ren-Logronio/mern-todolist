@@ -7,6 +7,7 @@ const todoListSchema = new Schema<ITodoList>({
         ref: "user",
     },
     name: String,
+    order: Number,
     description: String,
     todos: [{
         type: Schema.Types.ObjectId,
@@ -14,6 +15,6 @@ const todoListSchema = new Schema<ITodoList>({
     }]
 }, { timestamps: true });
 
-const todoListModel = mongoose.model("todoList", todoListSchema);
+const todoListModel = mongoose.model("list", todoListSchema);
 
 export { todoListSchema, todoListModel };

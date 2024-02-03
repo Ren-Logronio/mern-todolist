@@ -1,50 +1,30 @@
-import passport from "passport";
 import { IUser } from "../models";
 import { userModel as User } from "../models/userModel";
-import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import express, {Request, Response, NextFunction} from 'express';
 
 const salt = bcrypt.genSaltSync(7);
 const secret: string = process.env.JWT_SECRET || "secret";
 
-const LoginStrategy = new LocalStrategy(
-    { usernameField: "email", },
-    (email, password, done) => {
-        User.findOne({ email, password }, (err: Error, user: any) => {
-            if (err) return done(err);
-            if (!user) return done("No user found", false);
-            if (!user.verifyPassword(password)) return done(null, false); 
-            const token = jwt.sign(
-                { username: user.username },
-                secret,
-                {
-                  expiresIn: "30m",
-                }
-            );
-            return done(null, user);
-        })
+const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
+    const { user, token } = req.body;
+    const verification = jwt.verify(token, process.env.SECRET_KEY || "secret");
+    const { _id } = verification as { _id: string };
+    if (user._id !== _id) {
+        res.status(200).json(false);
     }
-);
-
-const RegistrationStrategy = new LocalStrategy(
-    { passReqToCallback: true, usernameField: "email", },
-    (req, email, password, done) => {
-        User.findOne({ email }, (err: Error, user: any) => { 
-            if(err) return done(err, false);
-            if(!user) {
-                const encryptedPassword = bcrypt.hashSync(password, salt);
-                const newUser = new User({email: String, password: encryptedPassword, username: req.body.username});
-                newUser.save()
-                    .then((user: IUser) => done(null, user))
-                    .catch((err: Error) => done(err, false));
+    User.findById(_id).then(
+        (user) => {
+            if (user) {
+                next();
+            } else {
+                res.status(200).json({status: "error", message: "Invalid Token"}); 
             }
-            if(user) done("User already exists", false);
-        })
-    }
-  );
+        }
+    ).catch(
+        () => { res.status(200).json({status: "error", message: "Invalid Token"}); }
+    )
+};
 
-passport.use("local-login", LoginStrategy);
-passport.use("local-register", RegistrationStrategy);
-
-export { passport as auth, LoginStrategy, RegistrationStrategy };
+export { verifyJWT }

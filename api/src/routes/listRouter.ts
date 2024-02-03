@@ -2,19 +2,20 @@ import express, { Request, Response } from "express";
 import { todoListModel as TodoList } from "../models/todoListModel";
 import { todoModel as Todo } from "../models/todoModel";
 import artificiallyDelay from "../middlewares/artificiallyDelay";
+import { verifyJWT } from "../app/auth";
 
 const router = express.Router();
 
 // Place routes
-router.get('/', artificiallyDelay, (req: Request, res: Response,) => {
-    TodoList.find({}).then(
+router.get('/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
+    TodoList.find({user: req.body.user._id}).then(
         (todoList: any) => { res.status(200).json(todoList) },
     ).catch(
         (err: any) => { res.status(500).json(err) },
     )
-})
+});
 
-router.get('/:id', artificiallyDelay, (req: Request, res: Response,) => {
+router.get('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findById(req.params.id).then(
         (todoList: any) => res.status(200).json(todoList),
@@ -23,8 +24,8 @@ router.get('/:id', artificiallyDelay, (req: Request, res: Response,) => {
     )
 })
 
-router.post('/', artificiallyDelay, (req: Request, res: Response,) => {
-    const newTodoList = new TodoList({ ...req.body });
+router.post('/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
+    const newTodoList = new TodoList({ ...req.body.list });
     newTodoList.save().then(
         (todoList: any) => res.status(200).json(todoList),
     ).catch(
@@ -32,10 +33,10 @@ router.post('/', artificiallyDelay, (req: Request, res: Response,) => {
     )
 });
 
-router.post('/:id/todo/', artificiallyDelay, (req: Request, res: Response,) => {
+router.post('/:id/todo/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     TodoList.findById(req.params.id).then(
         (todoList: any) => {
-            const newTodo = new Todo({ ...req.body });
+            const newTodo = new Todo({ ...req.body.todo });
             newTodo.save().then(
                 (todo: any) => {
                     todoList.todos.push({ _id: todo._id });
@@ -56,17 +57,17 @@ router.post('/:id/todo/', artificiallyDelay, (req: Request, res: Response,) => {
     );
 });
 
-router.put('/:id', artificiallyDelay, (req: Request, res: Response,) => {
+router.put('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
-    TodoList.findByIdAndUpdate(todoListId, { ...req.body }, { new: true }).then(
+    TodoList.findByIdAndUpdate(todoListId, { ...req.body.list }, { new: true }).then(
         (todoList: any) => res.status(200).json(todoList),
     ).catch(
         (err: any) => res.status(500).json(err),
     )
 });
 
-router.put('/reorder', artificiallyDelay, (req: Request, res: Response,) => {
-    const reOrderedList = req.body;
+router.put('/reorder', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
+    const reOrderedList = req.body.lists;
     const newlyOrderedList = reOrderedList.map((listObject: any) => {
         const { _id, order } = listObject;
         TodoList.findByIdAndUpdate(_id, { order }, { new: true }).then(
@@ -82,7 +83,7 @@ router.put('/reorder', artificiallyDelay, (req: Request, res: Response,) => {
     }
 });
 
-router.delete('/:id', artificiallyDelay, (req: Request, res: Response,) => {
+router.delete('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findByIdAndDelete(todoListId).then(
         (todoList: any) => res.status(200).json(todoList),

@@ -7,6 +7,8 @@ import ListMenu from "../components/ui/list-menu"
 import { useEffect, useState } from "react"
 import { UserStateType } from "../app/types"
 import Axios from "axios"
+import Screen from "@/components/ui/screen"
+import { useAuthStore } from "@/app/stores"
 
 /**
  * 
@@ -19,29 +21,28 @@ import Axios from "axios"
  */
 
 function HomePage() {
-  const [ userState, setUserState ] = useState<UserStateType>({ 
-    user: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user') || "{}"), 
-    token: localStorage.getItem('userToken'),
-    status: 'loading', 
-    message: null 
-  });
+  const userState = useAuthStore();
+
+  useEffect(()=> {
+    console.log(userState);
+  })
 
   return (
-    <div className="flex flex-col h-screen bg-gray-200">
+    <Screen>
       <Header userState={userState}/>
         <Dash>
           <ResizablePanelGroup direction="horizontal" className="min-h-full min-w-full border-0 rounded-lg border">
             <ResizablePanel defaultSize={40}>
-              <ListMenu userState={userState}/>
+              <ListMenu/>
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={60}>
-              <TodoMenu userState={userState}/>
+              <TodoMenu/>
             </ResizablePanel>
           </ResizablePanelGroup>
         </Dash>
       <Footer/>
-    </div>
+    </Screen>
   )
 }
 

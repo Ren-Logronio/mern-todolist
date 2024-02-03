@@ -2,10 +2,11 @@ import express, { Request, Response } from "express";
 import { todoModel as Todo } from "../models/todoModel";
 import { ObjectId } from "mongodb";
 import artificiallyDelay from "../middlewares/artificiallyDelay";
+import { verifyJWT } from "../app/auth";
 
 const router = express.Router();
 
-router.get("/", artificiallyDelay, (req: Request, res: Response) => {
+router.get("/", artificiallyDelay, verifyJWT, (req: Request, res: Response) => {
     Todo.find({}).then(
         (todo: any) => { 
             res.status(200).json(todo);
@@ -17,7 +18,7 @@ router.get("/", artificiallyDelay, (req: Request, res: Response) => {
     );
 });
 
-router.get("/:id", artificiallyDelay, (req: Request, res: Response) => {
+router.get("/:id", artificiallyDelay, verifyJWT, (req: Request, res: Response) => {
     const todoId = req.params.id;
     Todo.findById(todoId).then(
         (todo: any) => {
@@ -30,7 +31,7 @@ router.get("/:id", artificiallyDelay, (req: Request, res: Response) => {
     )
 });
 
-router.post("/", artificiallyDelay, (req: Request, res: Response) => {
+router.post("/", artificiallyDelay, verifyJWT, (req: Request, res: Response) => {
     const newTodo = new Todo({ ...req.body, completion: false });
     newTodo.save().then(
         (todo: any) => {
@@ -43,7 +44,7 @@ router.post("/", artificiallyDelay, (req: Request, res: Response) => {
     )
 });
 
-router.put("/:id", artificiallyDelay, (req: Request, res: Response) => {
+router.put("/:id", artificiallyDelay, verifyJWT, (req: Request, res: Response) => {
     const todoId = req.params.id;
     Todo.findByIdAndUpdate(todoId, { ...req.body }, { new: true }).then(
         (todo: any) => {
@@ -56,7 +57,7 @@ router.put("/:id", artificiallyDelay, (req: Request, res: Response) => {
     );
 });
 
-router.put('/reorder', artificiallyDelay, (req: Request, res: Response) => {
+router.put('/reorder', artificiallyDelay, verifyJWT, (req: Request, res: Response) => {
     const reorderedTodos = req.body;
     const newlyOrderedTodos = reorderedTodos.map((todoItem: any) => {
         const { _id, order } = todoItem;
@@ -73,7 +74,7 @@ router.put('/reorder', artificiallyDelay, (req: Request, res: Response) => {
     }
 });
 
-router.delete("/:id", artificiallyDelay, (req: Request, res: Response) => {
+router.delete("/:id", artificiallyDelay, verifyJWT, (req: Request, res: Response) => {
     const todoId = req.params.id;
     Todo.findByIdAndDelete(todoId).then(
         (todo: any) => res.status(200).json(todo)

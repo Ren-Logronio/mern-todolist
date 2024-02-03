@@ -3,7 +3,7 @@ import cors from "cors"
 import mongoose from "mongoose"
 import todoRouter from "./src/routes/todoRouter"
 import listRouter from "./src/routes/listRouter"
-import userRouter from "./src/routes/userRouter"
+import authRouter from "./src/routes/authRouter"
 
 const port = process.env.PORT || 3000;
 const mongodb_host = process.env.MONGODB_HOST || 'localhost'
@@ -21,7 +21,7 @@ express()
   .use(express.json())
   .use('/todo', todoRouter)
   .use('/list', listRouter)
-  .use('/user', userRouter)
+  .use('/auth', authRouter)
   .listen( port, () =>
     console.log(`App listening on PORT ${port}`)
   );

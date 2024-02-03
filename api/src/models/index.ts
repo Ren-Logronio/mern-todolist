@@ -18,5 +18,5 @@ export type ITodoList = {
 export type IUser = {
     email: string,
     password: string,
-    username?: string;
+    username: string;
 }

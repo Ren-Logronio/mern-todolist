@@ -1,6 +1,7 @@
 import { useAuthStore } from "@/app/stores";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import Footer from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Screen from "@/components/ui/screen";
@@ -89,6 +90,7 @@ export default function () {
                     <p className="text-sm">Don't have an account? <a href="/register" className="text-blue-500">Register</a></p>
                 </CardFooter>
             </Card>
+            <Footer className="fixed bottom-0 w-full" />
         </Screen>
     );
 }

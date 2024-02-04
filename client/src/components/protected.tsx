@@ -17,7 +17,6 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     resetList();
   }, [user, token]);
   useEffect(()=> {
-    console.log("trigger verify");
     if (user && token) {
       axios.post('/api/auth/verify/', {}, { headers: { authorization: `local ${token}` } }).then((res) => {
         if(res.data) {

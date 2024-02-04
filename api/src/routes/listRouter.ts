@@ -18,14 +18,6 @@ router.get('/', artificiallyDelay, (req: Request, res: Response,) => {
     )
 });
 
-// router.get('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
-//     TodoList.findById(req.params.id).then(
-//         (todoList: any) => res.status(200).json(todoList),
-//     ).catch(
-//         (err: any) => res.status(500).json(err),
-//     )
-// })
-
 router.get('/:id/todo/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findById(todoListId).populate("todos").then(
@@ -38,7 +30,6 @@ router.get('/:id/todo/', artificiallyDelay, verifyJWT, (req: Request, res: Respo
 });
 
 router.post('/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
-    console.log("adding");
     const newTodoList = new TodoList({ name: req.body.name, order: req.body.order, description: req.body.description, user: req.body.user });
     newTodoList.save().then(
         (todoList: any) => res.status(200).json(todoList),
@@ -85,7 +76,6 @@ router.post('/reorder/', artificiallyDelay, verifyJWT, (req: Request, res: Respo
             },
         )
     });
-    res.status(200).json(newlyOrderedList);
     if (newlyOrderedList.includes(false)) {
         res.status(500).json("Error reordering list");
     } else {

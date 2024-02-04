@@ -106,6 +106,9 @@ type TodoStoreActions = {
     setError: (message: string) => void,
     addTodo: (todo: Omit<TodoType, "_id">, listId: string, token: string | null, callback: ()=>void) => void,
     getTodos: (listId: string, token: string | null) => void,
+    deleteTodo: (todoId: string, token: string | null, callback: () => void) => void,
+    editTodo: (todoId: string, newTodo: Omit<TodoType, "_id">, token: string | null, callback: ()=>void) => void,
+    reorder: (newTodos: TodoType[], token: string | null) => void,
     setCompletion: (todoId: string, completion: boolean, token: string | null) => void,
     reset: () => void,
 }
@@ -125,7 +128,27 @@ const useTodoStore = create<{selectedList: ListType | null, currentOrder: number
             axios.post(`/api/list/${listId}/todo/`, { todo }, { headers: { authorization: `local ${token}` }}).then(
                 (res) => { 
                     callback();
-                    set((state) => ({ todos: [...state.todos, res.data], currentOrder: state.currentOrder + 1,status: "success", message: null })); 
+                    set((state) => ({ todos: [res.data, ...state.todos ], currentOrder: state.currentOrder + 1,status: "success", message: null })); 
+                }
+            ).catch(
+                (err) => { set((state) => ({ status: "error", message: err.message })); }
+            )
+        },
+        editTodo: (todoId: string, newTodo: Omit<TodoType, "_id">, token: string | null, callback: ()=>void) => {
+            axios.put(`/api/todo/${todoId}`, newTodo, { headers: { authorization: `local ${token}` }}).then(
+                (res) => { 
+                    set((state) => ({ todos: state.todos.map((i) => i._id == todoId ? {...i, ...newTodo} : i), status: "success", message: null })); 
+                    callback();
+                }
+            ).catch(
+                (err) => { set((state) => ({ status: "error", message: err.message })); }
+            )
+        },
+        deleteTodo: (todoId: string, token: string | null, callback: () => void) => {
+            axios.delete(`/api/todo/${todoId}`, { headers: { authorization: `local ${token}` }}).then(
+                (res) => {
+                    callback();
+                    set((state) => ({ todos: state.todos.filter((item) => item._id != todoId), status: "success", message: null })); 
                 }
             ).catch(
                 (err) => { set((state) => ({ status: "error", message: err.message })); }
@@ -134,12 +157,20 @@ const useTodoStore = create<{selectedList: ListType | null, currentOrder: number
         getTodos: (listId: string, token: string | null) => {
             axios.get(`/api/list/${listId}/todo/`, { headers: { authorization: `local ${token}` }}).then(
                 (res) => { 
-                    const orderedTodos = res.data.sort((a: any, b: any) => a.order - b.order);
+                    const orderedTodos = res.data.sort((a: any, b: any) => b.order - a.order);
                     set((state) => ({ todos: orderedTodos, currentOrder: orderedTodos.length > 0 ? orderedTodos[orderedTodos.length - 1].order : 0, status: "success", message: null })); 
                 }
             ).catch(
                 (err) => { set((state) => ({ status: "error", message: err.message })); }
             )
+        },
+        reorder: (newTodos: TodoType[], token: string | null) => {
+            set((state) => ({ todos: newTodos }));
+            axios.post("/api/todo/reorder/", { todos: newTodos }, { headers: { authorization: `local ${token}` } }).then(
+                (res) => { set((state) => ({ status: "success", message: null })); }
+            ).catch(
+                (err) => { set((state) => ({ status: "error", message: err.message })); }
+            );
         },
         setCompletion: (todoId: string, completion: boolean, token: string | null) => {
             axios.put(`/api/todo/${todoId}`, { completion }, { headers: { authorization: `local ${token}` }}).then(

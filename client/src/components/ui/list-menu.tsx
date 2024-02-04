@@ -34,7 +34,6 @@ export default function ListMenu(){
     const handleOnDropList = ({ removedIndex, addedIndex }: { removedIndex: any, addedIndex: any}) => {
         const newListOrder = arrayMoveImmutable(listStore.lists, removedIndex, addedIndex).map((list, index) => { list.order = index + 1; return list; });
         listStore.reorder(newListOrder, token);
-        console.log(removedIndex, addedIndex)
     }
 
     const handleNewListSubmit = () => {
@@ -147,7 +146,7 @@ export default function ListMenu(){
             }
             {
                 listStore.status == "success" && listStore.lists.length == 0 && !newList.new && 
-                <p className="text-center text-gray-400">No lists found</p>
+                <p className="text-center text-gray-400 mt-5">No lists found</p>
             }
         </div>
     );

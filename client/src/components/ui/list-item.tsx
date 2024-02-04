@@ -80,7 +80,6 @@ export default function ListItem({ list }: { list: ListType}) {
 
     const handleDelete = () => {
         setIsDeleting(true);
-        console.log('delete list')
         if( selectedList?._id == list._id ) {
             unselect();
         }

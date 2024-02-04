@@ -3,13 +3,16 @@ import { todoListModel as TodoList } from "../models/todoListModel";
 import { todoModel as Todo } from "../models/todoModel";
 import artificiallyDelay from "../middlewares/artificiallyDelay";
 import { verifyJWT } from "../app/auth";
+import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
 // Place routes
-router.get('/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
-    TodoList.find({user: req.body.user._id}).then(
-        (todoList: any) => { res.status(200).json(todoList) },
+router.get('/', artificiallyDelay, (req: Request, res: Response,) => {
+    const { user } = req.query;
+    const queryObject = req.query.user ? { user: new ObjectId(String(user)) } : {};
+    TodoList.find(queryObject).then(
+        (todoList: any) => { res.status(200).json({todoList}) },
     ).catch(
         (err: any) => { res.status(500).json(err) },
     )
@@ -25,7 +28,8 @@ router.get('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) 
 })
 
 router.post('/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
-    const newTodoList = new TodoList({ ...req.body.list });
+    console.log("adding");
+    const newTodoList = new TodoList({ name: req.body.name, order: req.body.order, description: req.body.description, user: req.body.user });
     newTodoList.save().then(
         (todoList: any) => res.status(200).json(todoList),
     ).catch(
@@ -57,6 +61,28 @@ router.post('/:id/todo/', artificiallyDelay, verifyJWT, (req: Request, res: Resp
     );
 });
 
+router.post('/reorder/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
+    const reOrderedList = req.body.lists;
+    const newlyOrderedList = reOrderedList.map((listObject: any) => {
+        const { _id: id, order } = listObject;
+        TodoList.findByIdAndUpdate(id, { order }, { new: true }).then(
+            (todoList: any) => {
+                return todoList;
+            },
+        ).catch(
+            (err: any) => {
+                return false;
+            },
+        )
+    });
+    res.status(200).json(newlyOrderedList);
+    if (newlyOrderedList.includes(false)) {
+        res.status(500).json("Error reordering list");
+    } else {
+        res.status(200).json(newlyOrderedList);
+    }
+});
+
 router.put('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
     TodoList.findByIdAndUpdate(todoListId, { ...req.body.list }, { new: true }).then(
@@ -64,23 +90,6 @@ router.put('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) 
     ).catch(
         (err: any) => res.status(500).json(err),
     )
-});
-
-router.put('/reorder', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
-    const reOrderedList = req.body.lists;
-    const newlyOrderedList = reOrderedList.map((listObject: any) => {
-        const { _id, order } = listObject;
-        TodoList.findByIdAndUpdate(_id, { order }, { new: true }).then(
-            (todoList: any) => todoList,
-        ).catch(
-            (err: any) => false,
-        )
-    });
-    if (newlyOrderedList.includes(false)) {
-        res.status(500).json("Error reordering list");
-    } else {
-        res.status(200).json(newlyOrderedList);
-    }
 });
 
 router.delete('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {

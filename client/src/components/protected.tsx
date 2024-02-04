@@ -12,7 +12,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const navigate = useNavigate();
   useEffect(()=> {
     if (user && token) {
-      axios.post('/api/auth/verify/', { user, token }).then((res) => {
+      axios.post('/api/auth/verify/', {}, { headers: { authorization: `local ${token}` } }).then((res) => {
         if(res.data) {
           return;
         } else {
@@ -24,7 +24,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         navigate('/signin');
       })
     }
-  });
+  }, [user, token]);
   if (!user && !token) {
     return <Navigate to="/signin"/>;
   };

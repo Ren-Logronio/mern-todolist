@@ -3,10 +3,11 @@ import { userModel as User } from "../models/userModel";
 import { ObjectId } from "mongodb";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import artificiallyDelay from "../middlewares/artificiallyDelay";
 
 const router = express.Router();
 
-router.post("/signin/", (req: Request, res: Response) => {
+router.post("/signin/", artificiallyDelay, (req: Request, res: Response) => {
     const { username, password } = req.body;
     User.findOne({ username: username }).then(
         (user) => {
@@ -18,7 +19,7 @@ router.post("/signin/", (req: Request, res: Response) => {
                         { _id: user._id },
                         process.env.SECRET_KEY || "secret",
                         {
-                            expiresIn: "30m",
+                            expiresIn: "2h",
                         }
                     );
                     const { _id, username } = user;
@@ -34,12 +35,8 @@ router.post("/signin/", (req: Request, res: Response) => {
 });
 
 router.post('/verify/', (req: Request, res: Response) => {
-    const { user, token } = req.body;
-    const verification = jwt.verify(token, process.env.SECRET_KEY || "secret");
+    const verification = jwt.verify(req.headers.authorization?.split(" ")[1] || "", process.env.SECRET_KEY || "secret");
     const { _id } = verification as { _id: string };
-    if (user._id !== _id) {
-        res.status(200).json(false);
-    }
     User.findById(_id).then(
         (user) => {
             if (user) {

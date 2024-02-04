@@ -7,11 +7,13 @@ import Screen from "@/components/ui/screen";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { TailSpin } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 
 export default function () {
     const [ input, setInput ] = useState({ username: "", password: "" });
     const [ errors, setErrors ] = useState({ username: "", password: "", card: "" });
+    const [ signingIn, setSigningIn ] = useState(false);
     const { user, token, status, message, signin: login } = useAuthStore();
     const navigate = useNavigate();
 
@@ -23,25 +25,29 @@ export default function () {
 
     const handleSubmit = () => {
         if (user && token) { return; };
+        setSigningIn(true);
         const { username, password } = input;
         axios.post("/api/auth/signin/", { username, password }).then((res) => {
             const { status, message, user, token } = res.data;
             if (status === "error") {
                 setErrors({ ...errors, card: message });
+                setSigningIn(false);
                 return;
             } else {
                 localStorage.setItem("user", JSON.stringify(user));
                 localStorage.setItem("token", token);
                 login(user, token);
+                setSigningIn(false);
             }
         }).catch(() => {
             setErrors({ ...errors, card: "Something wrong happened"});
+            setSigningIn(false);
         });
     }
 
     useEffect(() => {
         if (user && token) {
-            navigate("/");
+            navigate("/dash");
         }
         if (message) {
             setErrors({ ...errors, card: message ? message : "Something wrong happened"});
@@ -52,8 +58,8 @@ export default function () {
         <Screen className=" justify-center">
             <Card className=" min-w-full min-h-full md:min-h-[256px] md:min-w-[512px] mx-auto">
                 <CardHeader>
-                    <CardTitle className="flex flex-row items-center">
-                        <img src="./logo.png" className="mr-2"/>
+                    <CardTitle className="flex flex-row justify-start items-center">
+                        <img src="./logo.png" className="mr-2 size-10"/>
                         <p className="font-bold">Lizst Sign In</p>
                     </CardTitle>
                 </CardHeader>
@@ -75,8 +81,9 @@ export default function () {
                     </form>
                 </CardContent>
                 <CardFooter className="flex flex-col">
-                    <Button onClick={handleSubmit} className="w-full">
-                        Sign in
+                    <Button onClick={signingIn ? ()=>{} : handleSubmit} className="w-full">
+                        {signingIn && <TailSpin visible={true} height="20" width="20" color="#ffffff" ariaLabel="tail-spin-loading" radius="0.5" wrapperStyle={{}} wrapperClass="mr-2"/>}
+                        {signingIn ? "Signing in..." : "Sign in"}
                     </Button>
                     <Separator className="my-4"/>
                     <p className="text-sm">Don't have an account? <a href="/register" className="text-blue-500">Register</a></p>

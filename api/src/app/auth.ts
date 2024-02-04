@@ -8,12 +8,8 @@ const salt = bcrypt.genSaltSync(7);
 const secret: string = process.env.JWT_SECRET || "secret";
 
 const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
-    const { user, token } = req.body;
-    const verification = jwt.verify(token, process.env.SECRET_KEY || "secret");
+    const verification = jwt.verify(req.headers.authorization?.split(" ")[1] || "", process.env.SECRET_KEY || "secret");
     const { _id } = verification as { _id: string };
-    if (user._id !== _id) {
-        res.status(200).json(false);
-    }
     User.findById(_id).then(
         (user) => {
             if (user) {
@@ -25,6 +21,7 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     ).catch(
         () => { res.status(200).json({status: "error", message: "Invalid Token"}); }
     )
+    // next();
 };
 
 export { verifyJWT }

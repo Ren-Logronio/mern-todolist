@@ -67,7 +67,6 @@ router.delete("/:id", artificiallyDelay, verifyJWT, (req: Request, res: Response
 });
 
 router.post('/reorder/', artificiallyDelay, verifyJWT, (req: Request, res: Response) => {
-    console.log("Reourdering")
     const reorderedTodos = req.body.todos;
     const newlyOrderedTodos = reorderedTodos.map((todoItem: any) => {
         const { _id, order } = todoItem;

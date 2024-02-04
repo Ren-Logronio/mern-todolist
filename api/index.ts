@@ -10,10 +10,16 @@ const mongodb_host = process.env.MONGODB_HOST || 'localhost'
 const mongodb_port = process.env.MONGODB_PORT || 27017
 const mongodb_db = process.env.MONGODB_DB || 'mern-todolist-db'
 
-mongoose.connect(`mongodb://${mongodb_host}:${mongodb_port}/${mongodb_db}`).then(() => { 
-  console.log(`Mongoose connected @ mongodb://${mongodb_host}:${mongodb_port}/${mongodb_db}`);
+// mongoose.connect(`mongodb://${mongodb_host}:${mongodb_port}/${mongodb_db}`).then(() => { 
+//   console.log(`Mongoose connected @ mongodb://${mongodb_host}:${mongodb_port}/${mongodb_db}`);
+// }).catch((err: Error) => {
+//   console.log(`Mongoose connection error: ${err.message}`);
+// });
+
+mongoose.connect(`mongodb+srv://Ren-logronio:QJcy2TU1Udi9z9oN@cluster0.46h8obk.mongodb.net/mern-todolist-db`).then(() => { 
+  console.log(`Mongoose connected`);
 }).catch((err: Error) => {
-  console.log(`Mongoose connection error: ${err.message}`);
+  console.log(`Mongoose connection`);
 });
 
 express()

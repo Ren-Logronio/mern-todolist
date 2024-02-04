@@ -1,11 +1,8 @@
-import { UserStateType } from "@/app/types";
 import { useAuthStore, useGeneralStore, useTodoStore } from "@/app/stores";
 import { useEffect, useState } from "react";
 import { Input } from "./input";
 import { Button } from "./button";
 import { TailSpin } from "react-loader-spinner";
-import { time } from "console";
-import { Checkbox } from "./checkbox";
 import TodoItem from "./todo-item";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 import { Container, Draggable } from "react-smooth-dnd";
@@ -43,7 +40,7 @@ export default function TodoMenu(){
     }
 
     const handleOnDropTodos = ({ removedIndex, addedIndex }: { removedIndex: number, addedIndex: number}) => {
-        const newTodoOrder = arrayMoveImmutable(todosStore.todos, removedIndex, addedIndex).map((todo: any, index: number) => { todo.order = index + 1; return todo; });
+        const newTodoOrder = arrayMoveImmutable(todosStore.todos, removedIndex, addedIndex).reverse().map((todo: any, index: number) => { todo.order = index + 1; return todo; }).reverse();
         console.log(newTodoOrder);
         todosStore.reorder(newTodoOrder, token);
     }
@@ -98,18 +95,20 @@ export default function TodoMenu(){
                     { todosStore.status == "success" && todosStore.todos.length == 0 && <p className="text-center text-gray-400">No Todos</p> }
                     {
                         todosStore.status == "success" && 
-                        <ScrollArea className="max-h-[550px] mt-4 overflow-y-auto">
-                            <ScrollBar orientation="vertical" />
-                           { /* @ts-ignore */}
-                            <Container dragHandleSelector=".dnd-drag-handle" lockAxis="y" onDrop={handleOnDropTodos}>
-                                {todosStore.todos.map((todo, index) => (
-                                    /* @ts-ignore */
-                                    <Draggable key={todo._id}>
-                                            <TodoItem key={todo._id} todo={todo} />
-                                    </Draggable>
-                                ))}
-                            </Container>
-                        </ScrollArea>
+                        <>
+                            <ScrollArea className="max-h-[440px] mt-4 overflow-y-auto">
+                                <ScrollBar orientation="vertical" />
+                            { /* @ts-ignore */}
+                                <Container dragHandleSelector=".dnd-drag-handle" lockAxis="y" onDrop={handleOnDropTodos}>
+                                    {todosStore.todos.map((todo, index) => (
+                                        /* @ts-ignore */
+                                        <Draggable key={todo._id}>
+                                                <TodoItem key={todo._id} todo={todo} />
+                                        </Draggable>
+                                    ))}
+                                </Container>
+                            </ScrollArea>
+                        </>
                     }
                 </div>
             </div>

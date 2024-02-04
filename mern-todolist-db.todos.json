@@ -1,0 +1,75 @@
+[{
+  "_id": {
+    "$oid": "65bfeb28313c30e824f74e63"
+  },
+  "description": "Look for tickets at Pivotal",
+  "completion": false,
+  "order": 1,
+  "createdAt": {
+    "$date": "2024-02-04T19:53:12.982Z"
+  },
+  "updatedAt": {
+    "$date": "2024-02-04T19:53:12.982Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65bfef5e313c30e824f74ed0"
+  },
+  "description": "Check tickets in pivotal",
+  "completion": false,
+  "order": 4,
+  "createdAt": {
+    "$date": "2024-02-04T20:11:10.273Z"
+  },
+  "updatedAt": {
+    "$date": "2024-02-04T20:48:06.822Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65bfef66313c30e824f74ed5"
+  },
+  "description": "Turn on discord",
+  "completion": false,
+  "order": 2,
+  "createdAt": {
+    "$date": "2024-02-04T20:11:18.891Z"
+  },
+  "updatedAt": {
+    "$date": "2024-02-04T20:48:06.822Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65bfef6f313c30e824f74eda"
+  },
+  "description": "Check for any announcements",
+  "completion": false,
+  "order": 1,
+  "createdAt": {
+    "$date": "2024-02-04T20:11:27.655Z"
+  },
+  "updatedAt": {
+    "$date": "2024-02-04T20:48:06.822Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65bfef80313c30e824f74edf"
+  },
+  "description": "Complete the todolist app in 1.5 weeks",
+  "completion": true,
+  "order": 3,
+  "createdAt": {
+    "$date": "2024-02-04T20:11:44.410Z"
+  },
+  "updatedAt": {
+    "$date": "2024-02-04T20:48:06.822Z"
+  },
+  "__v": 0
+}]

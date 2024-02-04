@@ -5,4 +5,12 @@
   "email": "reinhart.logronio@gmail.com",
   "username": "reinhart.gg",
   "password": "$2a$12$Z.aNwtkQK2kJpL07uK/yCuWArMMLj.o/BU9WlSi7953Knwrr/JUJO"
+},
+{
+  "_id": {
+    "$oid": "65becf8574cc0bc4df5b56dc"
+  },
+  "email": "www.reinhart@gmail.com",
+  "username": "ren.io",
+  "password": "$2a$12$A10bWEEpDVmcb93qFBumaOUfY1omv0FVeUcvOecXGywMXl03G.UUq"
 }]

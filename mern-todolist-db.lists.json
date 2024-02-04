@@ -1,0 +1,51 @@
+[{
+  "_id": {
+    "$oid": "65bfef30313c30e824f74ec6"
+  },
+  "user": {
+    "$oid": "65be731474cc0bc4df5b56ce"
+  },
+  "name": "Work Activities",
+  "order": 2,
+  "description": "My schedules and reminders working in Innoendo IT solutions.. ",
+  "todos": [
+    {
+      "$oid": "65bfef5e313c30e824f74ed0"
+    },
+    {
+      "$oid": "65bfef66313c30e824f74ed5"
+    },
+    {
+      "$oid": "65bfef6f313c30e824f74eda"
+    },
+    {
+      "$oid": "65bfef80313c30e824f74edf"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-02-04T20:10:24.795Z"
+  },
+  "updatedAt": {
+    "$date": "2024-02-04T20:43:21.204Z"
+  },
+  "__v": 4
+},
+{
+  "_id": {
+    "$oid": "65bff49954477417aed6cee0"
+  },
+  "user": {
+    "$oid": "65be731474cc0bc4df5b56ce"
+  },
+  "name": "My Daily Activities",
+  "order": 1,
+  "description": "Doing stuff in house, parks.. reminders, chores..",
+  "todos": [],
+  "createdAt": {
+    "$date": "2024-02-04T20:33:29.843Z"
+  },
+  "updatedAt": {
+    "$date": "2024-02-04T20:43:21.204Z"
+  },
+  "__v": 0
+}]

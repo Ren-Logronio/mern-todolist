@@ -11,6 +11,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, token, signout: logout, timeout } = useAuthStore();
   const navigate = useNavigate();
   useEffect(()=> {
+    console.log("trigger verify");
     if (user && token) {
       axios.post('/api/auth/verify/', {}, { headers: { authorization: `local ${token}` } }).then((res) => {
         if(res.data) {
@@ -24,7 +25,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         navigate('/signin');
       })
     }
-  }, [user, token]);
+  },);
   if (!user && !token) {
     return <Navigate to="/signin"/>;
   };

@@ -25,6 +25,7 @@ mongoose.connect(`mongodb+srv://Ren-logronio:QJcy2TU1Udi9z9oN@cluster0.46h8obk.m
 express()
   .use(cors({ origin: true }))
   .use(express.json())
+  .use('/', (req, res) => res.send('Welcome to the MERN-TodoList API'))
   .use('/todo', todoRouter)
   .use('/list', listRouter)
   .use('/auth', authRouter)

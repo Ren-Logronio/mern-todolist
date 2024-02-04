@@ -4,7 +4,6 @@ import mongoose, { Schema } from "mongoose";
 const todoSchema = new Schema<ITodo>({
     description: String,
     completion: Boolean,
-    deadline: Date,
     order: Number,
 }, { timestamps: true });
 

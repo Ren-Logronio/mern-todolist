@@ -1,5 +1,5 @@
 import { create } from "Zustand";
-import { ListStateType, ListType, TodoStateType, UserStateType, UserType } from "./types";
+import { ListStateType, ListType, TodoStateType, TodoType, UserStateType, UserType } from "./types";
 import axios from "axios";
 
 type AuthStoreActions = {
@@ -24,7 +24,7 @@ const useAuthStore = create<UserStateType & AuthStoreActions>(
         timeout: () => {
             localStorage.removeItem("user");
             localStorage.removeItem("userToken");
-            set((state) => ({ user: null, token: null, status: "timeout", message: "Session Timed Out",})); 
+            set((state) => ({ user: null, token: null, status: "timeout", message: "User Timed out",})); 
         },
         signin: (user: UserType, token: string) => {
             localStorage.setItem("user", JSON.stringify(user));
@@ -44,8 +44,11 @@ type ListStoreActions = {
     setLists: (newLists: any[]) => void,
     addList: (newList: ListType) => void,
     reorder: (newLists: ListType[], token: string | null) => void,
+    editList: (listId: string, newList: ListType, token: string | null, callback: ()=>void) => void,
+    deleteList: (listId: string, token: string | null, callback: ()=>void) => void
     setLoading: () => void,
     setError: (message: string) => void,
+    reset: () => void,
 }
 
 const useListStore = create<ListStateType & {currentOrder: number} & ListStoreActions>(
@@ -62,6 +65,26 @@ const useListStore = create<ListStateType & {currentOrder: number} & ListStoreAc
             const highestOrder = newLists.length > 0 ? orderedNewList[orderedNewList.length - 1].order : 0;
             set((state) => ({ lists: orderedNewList, currentOrder: highestOrder, status: "success", message: null })); 
         },
+        editList: (listId: string, newList: ListType, token: string | null, callback: ()=>void) => {
+            axios.put(`/api/list/${listId}`, newList, { headers: { authorization: `local ${token}` }}).then(
+                (res) => { 
+                    callback();
+                    set((state) => ({lists: state.lists.map((i) => i._id == listId ? {...i, ...newList} : i), status: "success", message: null })); 
+                }
+            ).catch(
+                (err) => { set((state) => ({ status: "error", message: err.message })); }
+            )
+        },
+        deleteList: (listId: string, token: string | null, callback: ()=>void) => {
+            axios.delete(`/api/list/${listId}`, { headers: { authorization: `local ${token}` }}).then(
+                (res) => { 
+                    callback();
+                    set((state) => ({lists: state.lists.filter((item) => item._id != listId), status: "success", message: null }));
+                }
+            ).catch(
+                (err) => { set((state) => ({ status: "error", message: err.message })); }
+            )
+        },
         reorder: (newLists: ListType[], token: string | null) => { 
             set((state) => ({ lists: newLists }));
             axios.post("/api/list/reorder/", { lists: newLists }, { headers: { authorization: `local ${token}` } }).then(
@@ -72,22 +95,60 @@ const useListStore = create<ListStateType & {currentOrder: number} & ListStoreAc
         },
         setLoading: () => { set((state) => ({ status: "loading", message: null })); },
         setError: (message: string) => { set((state) => ({ status: "error", message: message })); },
+        reset: () => { set((state) => ({ lists: [], status: "loading", message: null })); },
     }),
 );
 
 type TodoStoreActions = {
     select: (list: ListType) => void,
     unselect: () => void,
+    setLoading: () => void,
+    setError: (message: string) => void,
+    addTodo: (todo: Omit<TodoType, "_id">, listId: string, token: string | null, callback: ()=>void) => void,
+    getTodos: (listId: string, token: string | null) => void,
+    setCompletion: (todoId: string, completion: boolean, token: string | null) => void,
+    reset: () => void,
 }
 
-const useTodoStore = create<{selectedList: ListType | null} & TodoStateType & TodoStoreActions>(
+const useTodoStore = create<{selectedList: ListType | null, currentOrder: number} & TodoStateType & TodoStoreActions>(
     (set) => ({
         selectedList: null,
         todos: [],
         status: "loading",
+        currentOrder: 0,
         message: null,
         select: (list: ListType) => { set((state) => ({ selectedList: list, todos: [], status: "loading", message: null })); },
         unselect: () => { set((state) => ({ selectedList: null, todos: [], status: "idle", message: null })); },
+        setLoading: () => { set((state) => ({ status: "loading", message: null })); },
+        setError: (message: string) => { set((state) => ({ status: "error", message: message })); },
+        addTodo: (todo: Omit<TodoType, "_id">, listId: string, token: string | null, callback: ()=>void) => {
+            axios.post(`/api/list/${listId}/todo/`, { todo }, { headers: { authorization: `local ${token}` }}).then(
+                (res) => { 
+                    callback();
+                    set((state) => ({ todos: [...state.todos, res.data], currentOrder: state.currentOrder + 1,status: "success", message: null })); 
+                }
+            ).catch(
+                (err) => { set((state) => ({ status: "error", message: err.message })); }
+            )
+        },
+        getTodos: (listId: string, token: string | null) => {
+            axios.get(`/api/list/${listId}/todo/`, { headers: { authorization: `local ${token}` }}).then(
+                (res) => { 
+                    const orderedTodos = res.data.sort((a: any, b: any) => a.order - b.order);
+                    set((state) => ({ todos: orderedTodos, currentOrder: orderedTodos.length > 0 ? orderedTodos[orderedTodos.length - 1].order : 0, status: "success", message: null })); 
+                }
+            ).catch(
+                (err) => { set((state) => ({ status: "error", message: err.message })); }
+            )
+        },
+        setCompletion: (todoId: string, completion: boolean, token: string | null) => {
+            axios.put(`/api/todo/${todoId}`, { completion }, { headers: { authorization: `local ${token}` }}).then(
+                (res) => { set((state) => ({ todos: state.todos.map((i) => i._id == todoId ? {...i, completion: completion} : i), status: "success", message: null })); }
+            ).catch(
+                (err) => { set((state) => ({ status: "error", message: err.message })); }
+            )
+        },
+        reset: () => { set((state) => ({ todos: [], selectedList: null, status: "idle", message: null })); },
     }),
 );
 
@@ -103,4 +164,18 @@ const useTestStore = create<TestStoreType>(
     }),
 );
 
-export { useAuthStore, useListStore, useTodoStore, useTestStore };
+type GeneralStoreType = {
+    errorDialog: boolean,
+    errorDialogMessage: string,
+    setErrorDialog: (message: string) => void,
+    clearErrorDialog: () => void,
+}
+
+const useGeneralStore = create<GeneralStoreType>((set) => ({
+    errorDialog: false,
+    errorDialogMessage: "",
+    setErrorDialog: (message: string) => { set((state) => ({ errorDialog: true, errorDialogMessage: message })); },
+    clearErrorDialog: () => { set((state) => ({ errorDialog: false, errorDialogMessage: "" })); },
+}))
+
+export { useAuthStore, useListStore, useTodoStore, useTestStore, useGeneralStore };

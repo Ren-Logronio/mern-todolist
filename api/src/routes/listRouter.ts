@@ -18,14 +18,24 @@ router.get('/', artificiallyDelay, (req: Request, res: Response,) => {
     )
 });
 
-router.get('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
+// router.get('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
+//     TodoList.findById(req.params.id).then(
+//         (todoList: any) => res.status(200).json(todoList),
+//     ).catch(
+//         (err: any) => res.status(500).json(err),
+//     )
+// })
+
+router.get('/:id/todo/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
-    TodoList.findById(req.params.id).then(
-        (todoList: any) => res.status(200).json(todoList),
+    TodoList.findById(todoListId).populate("todos").then(
+        (todoList: any) => {
+            res.status(200).json(todoList.todos);
+        },
     ).catch(
         (err: any) => res.status(500).json(err),
     )
-})
+});
 
 router.post('/', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     console.log("adding");
@@ -45,7 +55,7 @@ router.post('/:id/todo/', artificiallyDelay, verifyJWT, (req: Request, res: Resp
                 (todo: any) => {
                     todoList.todos.push({ _id: todo._id });
                     todoList.save().then(
-                        (todoList: any) => res.status(200).json(todoList),
+                        (todoList: any) => res.status(200).json(todo),
                     ).catch(
                         (err:any) => { throw err },
                     );
@@ -85,7 +95,7 @@ router.post('/reorder/', artificiallyDelay, verifyJWT, (req: Request, res: Respo
 
 router.put('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
-    TodoList.findByIdAndUpdate(todoListId, { ...req.body.list }, { new: true }).then(
+    TodoList.findByIdAndUpdate(todoListId, { ...req.body }, { new: true }).then(
         (todoList: any) => res.status(200).json(todoList),
     ).catch(
         (err: any) => res.status(500).json(err),

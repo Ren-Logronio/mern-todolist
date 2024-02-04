@@ -30,8 +30,8 @@ export default function Header({ userState: user }: HeaderProps) {
             user && 
             <>
               <p>{user.user?.username}</p>
-              <Button onClick={signingOut ? ()=> {} : handleSignout} className="ml-2">
-                {signingOut && <TailSpin visible={true} height="20" width="20" color="#ffffff" ariaLabel="tail-spin-loading" radius="0.5" wrapperStyle={{}} wrapperClass="mr-2"/>}
+              <Button variant="outline" onClick={signingOut ? ()=> {} : handleSignout} className="ml-2">
+                {signingOut && <TailSpin visible={true} height="20" width="20" color="#000000" ariaLabel="tail-spin-loading" radius="0.5" wrapperStyle={{}} wrapperClass="mr-2"/>}
                 {signingOut ? "Signing Out..." : "Sign out"}
               </Button>
             </>

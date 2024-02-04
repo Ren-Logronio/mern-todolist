@@ -16,7 +16,6 @@ export type TodoType = {
     _id: string;
     description: string;
     completion: boolean;
-    deadline: Date;
     order: number;
 }
 

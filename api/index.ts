@@ -1,10 +1,11 @@
+require('dotenv').config();
+
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
 import todoRouter from "./src/routes/todoRouter"
 import listRouter from "./src/routes/listRouter"
 import authRouter from "./src/routes/authRouter"
-
 const port = process.env.PORT || 3000;
 const mongodb_host = process.env.MONGODB_HOST || 'localhost'
 const mongodb_port = process.env.MONGODB_PORT || 27017

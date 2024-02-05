@@ -1,4 +1,4 @@
-import { create } from "Zustand";
+import { create } from "zustand";
 import { ListStateType, ListType, TodoStateType, TodoType, UserStateType, UserType } from "./types";
 import axios from "axios";
 

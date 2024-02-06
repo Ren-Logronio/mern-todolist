@@ -3,8 +3,6 @@ import Footer from "@/components/ui/footer";
 import Screen from "@/components/ui/screen";
 import { useNavigate } from "react-router-dom";
 
-
-
 export default function Landing() {
     const navigate = useNavigate();
 

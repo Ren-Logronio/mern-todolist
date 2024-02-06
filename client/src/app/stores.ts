@@ -198,15 +198,23 @@ const useTestStore = create<TestStoreType>(
 type GeneralStoreType = {
     errorDialog: boolean,
     errorDialogMessage: string,
+    githubInformation: any,
     setErrorDialog: (message: string) => void,
     clearErrorDialog: () => void,
+    getGithubInformation: () => void,
 }
 
 const useGeneralStore = create<GeneralStoreType>((set) => ({
     errorDialog: false,
     errorDialogMessage: "",
+    githubInformation: {},
     setErrorDialog: (message: string) => { set((state) => ({ errorDialog: true, errorDialogMessage: message })); },
     clearErrorDialog: () => { set((state) => ({ errorDialog: false, errorDialogMessage: "" })); },
+    getGithubInformation: () => {
+        axios.get("https://api.github.com/repos/Ren-logronio/mern-todolist").then((res) => {
+            set((state) => ({ githubInformation: {...res.data} }));
+        }).catch(err => {console.log(err)});
+    },
 }))
 
 export { useAuthStore, useListStore, useTodoStore, useTestStore, useGeneralStore };

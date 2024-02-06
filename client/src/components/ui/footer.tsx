@@ -16,11 +16,10 @@ export default function Footer({ className }: {className?: string}) {
     const ampm = hours >= 12 ? 'PM' : 'AM';
     const formattedHours = hours % 12 || 12;
 
-    return `${month}-${year}-${day} ${formattedHours}:${minutes.toString().padStart(2, '0')} ${ampm}`
+    return `${month}-${day}-${year} ${formattedHours}:${minutes.toString().padStart(2, '0')} ${ampm}`
   }
 
   useEffect(() => {
-    console.log('Github fetch')
     getGithubInformation();
   }, []);
 

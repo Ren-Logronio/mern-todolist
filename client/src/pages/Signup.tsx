@@ -20,11 +20,11 @@ export default function () {
                 <CardContent>
                     <div className="grid w-full items-center gap-4">
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="username/email">Email</Label>
-                                <Input id="username" placeholder="Please enter your username" />
+                                <Label htmlFor="email">Email</Label>
+                                <Input id="email" placeholder="Please enter your username" />
                             </div>
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="username/email">Username</Label>
+                                <Label htmlFor="username">Username</Label>
                                 <Input id="username" placeholder="Please enter your username" />
                             </div>
                             <div className="flex flex-col space-y-1.5">

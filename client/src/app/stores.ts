@@ -211,7 +211,9 @@ const useGeneralStore = create<GeneralStoreType>((set) => ({
     setErrorDialog: (message: string) => { set((state) => ({ errorDialog: true, errorDialogMessage: message })); },
     clearErrorDialog: () => { set((state) => ({ errorDialog: false, errorDialogMessage: "" })); },
     getGithubInformation: () => {
+        if (Object.keys(useGeneralStore.getState().githubInformation).length > 0) return;
         axios.get("https://api.github.com/repos/Ren-logronio/mern-todolist").then((res) => {
+            console.log("triggered once");
             set((state) => ({ githubInformation: {...res.data} }));
         }).catch(err => {console.log(err)});
     },

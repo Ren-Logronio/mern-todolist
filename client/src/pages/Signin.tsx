@@ -87,7 +87,7 @@ export default function () {
                         {signingIn ? "Signing in..." : "Sign in"}
                     </Button>
                     <Separator className="my-4"/>
-                    <p className="text-sm">Don't have an account? <a href="/register" className="text-blue-500">Register</a></p>
+                    <p className="text-sm">Don't have an account? <a href="/register" className="text-blue-500">Sign Up</a></p>
                 </CardFooter>
             </Card>
             <Footer className="fixed bottom-0 w-full" />

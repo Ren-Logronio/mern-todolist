@@ -1,4 +1,3 @@
-require('dotenv').config();
 
 import express from "express"
 import cors from "cors"
@@ -10,6 +9,9 @@ const port = process.env.PORT || 3000;
 const mongodb_host = process.env.MONGODB_HOST || 'localhost'
 const mongodb_port = process.env.MONGODB_PORT || 27017
 const mongodb_db = process.env.MONGODB_DB || 'mern-todolist-db'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 mongoose.connect(`mongodb://${mongodb_host}:${mongodb_port}/${mongodb_db}`).then(() => { 
   console.log(`Mongoose connected @ mongodb://${mongodb_host}:${mongodb_port}/${mongodb_db}`);
@@ -17,10 +19,10 @@ mongoose.connect(`mongodb://${mongodb_host}:${mongodb_port}/${mongodb_db}`).then
   console.log(`Mongoose connection error: ${err.message}`);
 });
 
-// mongoose.connect(`mongodb+srv://Ren-logronio:QJcy2TU1Udi9z9oN@cluster0.46h8obk.mongodb.net/mern-todolist-db`).then(() => { 
-//   console.log(`Mongoose connected`);
+// mongoose.connect(`mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASS}@${process.env.ATLAS_CLUSTER}/${process.env.ATLAS_DB}`).then(() => { 
+//   console.log(`Mongoose connected @ mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASS}@${process.env.ATLAS_CLUSTER}/${process.env.ATLAS_DB}`);
 // }).catch((err: Error) => {
-//   console.log(`Mongoose connection`);
+//   console.log(`Mongoose connection error: ${err.message}`);
 // });
 
 express()

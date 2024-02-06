@@ -94,8 +94,13 @@ router.put('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) 
 
 router.delete('/:id', artificiallyDelay, verifyJWT, (req: Request, res: Response,) => {
     const todoListId = req.params.id;
-    TodoList.findByIdAndDelete(todoListId).then(
-        (todoList: any) => res.status(200).json(todoList),
+    TodoList.findByIdAndDelete(todoListId).populate("todos").then(
+        (todoList: any) => {
+            todoList.todos.forEach((todo: any) => {
+                Todo.findByIdAndDelete(todo._id).catch((err) => res.status(500).json(err));
+            });
+            res.status(200).json(todoList);
+        },
     ).catch(
         (err: any) => res.status(500).json(err),
     )

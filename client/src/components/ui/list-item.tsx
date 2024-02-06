@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import { Textarea } from "./textarea";
 
@@ -90,9 +90,13 @@ export default function ListItem({ list }: { list: ListType}) {
         // listStore.deleteList(list._id);
     }
 
+    useEffect(() => {
+        console.log(list?.description);
+    },)
+
     return (
         <>
-            <div onClick={handleItemPress} className={`relative shadow-md drag-handle relative flex flex-col my-1 mr-3 items-start bg-white justify-between border ${ list._id == selectedList?._id ? "border-orange-500 p-2 hover:border-orange-600" : "border-gray-300 p-2 hover:border-orange-400"} cursor-pointer z-[0]`}>
+            <div onClick={handleItemPress} className={`relative shadow-md drag-handle relative flex flex-col my-1 mr-3 items-start bg-white justify-between border ${ list._id == selectedList?._id ? "border-orange-500 p-2 hover:border-orange-300" : "border-gray-300 p-2 hover:border-orange-400"} cursor-pointer z-[0]`}>
                 <div className="flex w-full flex-row justify-between">
                     <p className="text-start text-nowrap max-w-[450px] text-ellipsis align-start font-semibold pr-12 overflow-hidden pb-4">{list.name}</p>
                     <DropdownMenu>
@@ -104,19 +108,24 @@ export default function ListItem({ list }: { list: ListType}) {
                         <DropdownMenuContent onClick={(e) => { e.preventDefault() }} className="z-[1]">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => { setEditAction(true) }}className=" cursor-pointer">Edit</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => { setDeleteAction(true) }} className=" cursor-pointer">Remove</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => { setEditAction(true) }}className=" cursor-pointer">
+                                Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => { setDeleteAction(true) }} className=" cursor-pointer">
+                                Remove
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-                <p className="text-start text-sm">{list.description}</p>
+                <p className="text-start text-sm whitespace-pre-line">{list.description}</p>
             </div>
             <Dialog open={deleteAction} onOpenChange={ !isdeleting ? toggleDeleteAction : () => {}}>
                 <DialogContent className="sm:max-w-[425px] z-[100]">
                     <DialogHeader>
                         <DialogTitle className="flex flex-row">Remove "<p className="text-ellipsis text-nowrap overflow-hidden max-w-[256px]">{list.name}</p>"</DialogTitle>
                         <DialogDescription>
-                            Removing this list will also remove its todo contents. This action cannot be undone.
+                            By removing this list, you will also lose your todo's.<br/><br/>
+                            <p className=" text-red-600">This action cannot be undone.</p>
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className=" flex flex-row justify-end">

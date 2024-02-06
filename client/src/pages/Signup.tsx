@@ -7,11 +7,14 @@ import Screen from "@/components/ui/screen";
 export default function () {
     return (
         <Screen>
+            <div className="fixed flex flex-col justify-center size-full bg-black bg-opacity-[0.65] select-none">
+                <p className="text-center text-[2.5rem] text-orange-200 font-black my-auto">Chilax sa ta guro hehehe<br></br>😅😅😅</p>
+            </div>
             <Card className="max-w-[512px] min-w-[512px] mx-auto my-auto">
                 <CardHeader>
                     <CardTitle className="flex flex-row justify-start items-center">
                         <img src="./logo.png" className="mr-2 size-10"/>
-                        <p className="font-bold">Lizst Sign In</p>
+                        <p className="font-bold">Lizst Sign Up</p>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>

@@ -1,4 +1,4 @@
-import { useAuthStore, useGeneralStore, useTodoStore } from "@/app/stores";
+import { useAuthStore, useTodoStore } from "@/app/stores";
 import { useEffect, useState } from "react";
 import { Input } from "./input";
 import { Button } from "./button";
@@ -10,7 +10,6 @@ import { arrayMoveImmutable } from "array-move";
 
 export default function TodoMenu(){
     const todosStore = useTodoStore();
-    const { setErrorDialog } = useGeneralStore();
     const [ todoForm, setTodoForm ] = useState({description: "", loading: false, error: ""});
     // const [ remainingChar, setRemainingChar ] = useState(150);
     const { token } = useAuthStore();
@@ -100,7 +99,7 @@ export default function TodoMenu(){
                                 <ScrollBar orientation="vertical" />
                             { /* @ts-ignore */}
                                 <Container dragHandleSelector=".dnd-drag-handle" lockAxis="y" onDrop={handleOnDropTodos}>
-                                    {todosStore.todos.map((todo, index) => (
+                                    {todosStore.todos.map((todo) => (
                                         /* @ts-ignore */
                                         <Draggable key={todo._id}>
                                                 <TodoItem key={todo._id} todo={todo} />

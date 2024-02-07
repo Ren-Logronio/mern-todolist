@@ -8,14 +8,11 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog";
 import { Textarea } from "./textarea";
-import { Label } from "./label";
 import { ScrollBar, ScrollArea } from "./scroll-area";
 import ListItem from "./list-item";
 import { Container, Draggable } from "react-smooth-dnd";

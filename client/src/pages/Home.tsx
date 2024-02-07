@@ -4,15 +4,12 @@ import Dash from "../components/ui/dash"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
 import TodoMenu from "../components/ui/todo-menu"
 import ListMenu from "../components/ui/list-menu"
-import { useEffect, useRef, useState } from "react"
-import { UserStateType } from "../app/types"
-import Axios from "axios"
 import Screen from "@/components/ui/screen"
 import { useAuthStore, useGeneralStore } from "@/app/stores"
 import { ImperativePanelHandle } from "react-resizable-panels"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { DialogClose } from "@radix-ui/react-dialog"
 import { Button } from "@/components/ui/button"
+import { useRef } from "react"
 
 /**
  * 

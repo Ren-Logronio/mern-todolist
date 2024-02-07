@@ -15,7 +15,7 @@ export default function () {
     const [ input, setInput ] = useState({ username: "", password: "" });
     const [ errors, setErrors ] = useState({ username: "", password: "", card: "" });
     const [ signingIn, setSigningIn ] = useState(false);
-    const { user, token, status, message, signin: login } = useAuthStore();
+    const { user, token, message, signin: login } = useAuthStore();
     const navigate = useNavigate();
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {

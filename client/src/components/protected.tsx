@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, token, signout: logout, timeout } = useAuthStore();
+  const { user, token, timeout } = useAuthStore();
   const { reset: resetList } = useListStore();
   const { reset: resetAuth } = useTodoStore();
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
           timeout();
           navigate('/signin');
         }
-      }).catch((err: Error) => {
+      }).catch(() => {
         timeout();
         navigate('/signin');
       })

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "./hover-card";
 import { useGeneralStore } from "@/app/stores";
 import { TailSpin } from "react-loader-spinner";

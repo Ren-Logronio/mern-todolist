@@ -28,6 +28,7 @@ mongoose_1.default.connect(`mongodb+srv://${process.env.ATLAS_USER}:${process.en
 (0, express_1.default)()
     .use((0, cors_1.default)({ origin: true }))
     .use(express_1.default.json())
+    .use('/test', (res, req) => req.end('test works'))
     .use('/todo', todoRouter_1.default)
     .use('/list', listRouter_1.default)
     .use('/auth', authRouter_1.default)

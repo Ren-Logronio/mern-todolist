@@ -29,6 +29,7 @@ mongoose.connect(`mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PA
 express()
   .use(cors({ origin: true }))
   .use(express.json())
+  .use('/test', (res: any, req: any) => req.end('test works'))
   .use('/todo', todoRouter)
   .use('/list', listRouter)
   .use('/auth', authRouter)

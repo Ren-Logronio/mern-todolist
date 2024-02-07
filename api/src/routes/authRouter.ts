@@ -53,4 +53,33 @@ router.post('/verify/', (req: Request, res: Response) => {
 router.post("/register/", (req: Request, res: Response) => {
 });
 
+router.post("/username", (req: Request, res: Response) => {
+    const { username } = req.body;
+    User.find({ username }).then((users: any) => {
+        if (users.length <= 0) {
+            res.status(200).json({ status: "success", message: "Username is available" });
+        } else {
+            res.status(200).json({ status: "error", message: "Username is taken" });
+        }
+    }).catch(() => {
+        res.status(200).json({ status: "error", message: "Internal Server Error" });
+    })
+});
+
+router.post("/signup/", (req: Request, res: Response) => {
+    const { username, password } = req.body;
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const user = new User({ username, password: hashedPassword });
+    user.save().then(
+        (user) => {
+            const token = jwt.sign(user._id, process.env.SECRET_KEY || "secret", { expiresIn: "2h" });
+            res.status(200).json({ token, status: "success", message: "User created" });
+        }
+    ).catch(
+        () => {
+            res.status(200).json({ status: "error", message: "Internal Server Error" });
+        }
+    )
+});
+
 export default router;

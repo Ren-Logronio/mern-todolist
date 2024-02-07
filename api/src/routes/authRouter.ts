@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { userModel as User } from "../models/userModel";
-import { ObjectId } from "mongodb";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { verificationModel as Verification } from "src/models/verificationModel";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import artificiallyDelay from "../middlewares/artificiallyDelay";
 
@@ -67,19 +67,31 @@ router.post("/username", (req: Request, res: Response) => {
 });
 
 router.post("/signup/", (req: Request, res: Response) => {
-    const { username, password } = req.body;
+    const { email, username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const user = new User({ username, password: hashedPassword });
-    user.save().then(
-        (user) => {
-            const token = jwt.sign(user._id, process.env.SECRET_KEY || "secret", { expiresIn: "2h" });
-            res.status(200).json({ token, status: "success", message: "User created" });
-        }
-    ).catch(
-        () => {
-            res.status(200).json({ status: "error", message: "Internal Server Error" });
-        }
-    )
+    // generate 6 digit char
+    const code = Math.random().toString(36).substring(2, 8);
+    
+
+    // send email
+    /*n
+
+    Thank you for signing up for our service. To finally confirm your account, please enter the following code into the app:
+    [6 digit code here]
+
+    */
+    const verification = new Verification({ email, username, password, code });
+    verification.save().then(() => {
+        res.status(200).json({ status: "success", message: "Verification code sent" });
+    }).catch(() => {
+        res.status(200).json({ status: "error", message: "Internal Server Error" });
+    });
 });
+
+router.post("/confirm", (req: Request, res: Response) => {
+    const { code } = req.query;
+    // token is the signed code sent from the email, verifies that the user the code is being sent to is the same user that requested the code
+    Verification.findOne({ code })
+})
 
 export default router;

@@ -20,3 +20,7 @@ export type IUser = {
     password: string,
     username: string;
 }
+
+export type IVerification = {
+    code: string;
+} & IUser;

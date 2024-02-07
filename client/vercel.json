@@ -1,6 +1,6 @@
 {
     "rewrites": [
-        { "source": "/api/:path(.*)", "destination": "https://mern-todolist-api.vercel.app" },
+        { "source": "/api/:path(.*)", "destination": "https://mern-todolist-api.vercel.app/:path" },
         { "source": "/(.*)", "destination": "/index.html" }
     ]
 }

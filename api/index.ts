@@ -20,11 +20,11 @@ const port = process.env.PORT || 3000;
 //   console.log(`Mongoose connection error: ${err.message}`);
 // });
 
-// mongoose.connect(`mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASS}@${process.env.ATLAS_CLUSTER}/${process.env.ATLAS_DB}`).then(() => { 
-//   console.log(`Mongoose connected @ mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASS}@${process.env.ATLAS_CLUSTER}/${process.env.ATLAS_DB}`);
-// }).catch((err: Error) => {
-//   console.log(`Mongoose connection error: ${err.message}`);
-// });
+mongoose.connect(`mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASS}@${process.env.ATLAS_CLUSTER}/${process.env.ATLAS_DB}`).then(() => { 
+  console.log(`Mongoose connected @ mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASS}@${process.env.ATLAS_CLUSTER}/${process.env.ATLAS_DB}`);
+}).catch((err: Error) => {
+  console.log(`Mongoose connection error: ${err.message}`);
+});
 
 express()
   .use(cors({ origin: true }))

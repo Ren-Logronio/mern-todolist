@@ -26,13 +26,18 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
     "nodemon": "^3.0.3",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   },
   "scripts": {
     "vercel-build": "echo hello",
-    "build": "npx tsc",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
     "start": "node dist/index.js",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon index.ts",
+    "add-build": "git add dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
